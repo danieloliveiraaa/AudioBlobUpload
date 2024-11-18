@@ -38,11 +38,8 @@ namespace AudioTeste.Controllers
             //verifico se o arquivo foi enviado
             if (audioFile == null || audioFile.Length == 0) return BadRequest("Nenhum arquivo foi enviado.");
 
-            //limitação de 5mb
-            if (audioFile.Length > 5_000_000) return BadRequest("O arquivo está muito grande. Limite: 5 MB.");
-            
-
-
+            //limite de 5mb por audio.
+            if (audioFile.Length > 5_000_000) return BadRequest("O arquivo estï¿½ muito grande. Limite: 5 MB.");
 
             var containerClient = _blobServiceClient.GetBlobContainerClient(nomeContainer);
             await containerClient.CreateIfNotExistsAsync();
