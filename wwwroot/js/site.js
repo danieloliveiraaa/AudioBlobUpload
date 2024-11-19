@@ -41,9 +41,9 @@
 
 let gravadorAudio;
 let mp3Encoder;
-let audioChunks = [];
+let audioPartes = [];
 let mp3Data = [];
-let audioContext;
+let audioContexto;
 let processor;
 
 $('#startButton').on('click', async function () {
@@ -55,13 +55,13 @@ $('#startButton').on('click', async function () {
     gravadorAudio = new MediaRecorder(stream);
 
     // Crio um contexto de áudio para trabalhar com o Stream
-    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    audioContexto = new (window.AudioContext || window.webkitAudioContext)();
 
     //controle do audio gravado
-    const source = audioContext.createMediaStreamSource(stream);
+    const source = audioContexto.createMediaStreamSource(stream);
 
     //processamento do audio
-    processor = audioContext.createScriptProcessor(4096, 1, 1); // Tamanho do buffer
+    processor = audioContexto.createScriptProcessor(4096, 1, 1); // Tamanho do buffer
 
     //utilizando lameJS para conversão do audio para mp3
     mp3Encoder = new lamejs.Mp3Encoder(1, 44100, 128);
@@ -79,7 +79,7 @@ $('#startButton').on('click', async function () {
     // associando ou conectando o fluxo de áudio capturado do microfone ao processador de audio
     source.connect(processor);
 
-    processor.connect(audioContext.destination);
+    processor.connect(audioContexto.destination);
 
     // Controlar quando a gravação é interrompida
     gravadorAudio.onstop = async () => {
@@ -124,7 +124,7 @@ $('#stopButton').on('click', function () {
     gravadorAudio.stop();
     $('#startButton').prop('disabled', false);
     $('#stopButton').prop('disabled', true);
-    audioChunks = [];
+    audioPartes = [];
 });
 
 function convertFloat32ToInt16(float32Data) {
