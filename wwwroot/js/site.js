@@ -1,7 +1,6 @@
 ﻿let gravadorAudio;
-let audioChunks = [];
+let audioPartes = [];
 
-// Evento para iniciar a gravação
 $('#startButton').on('click', async function () {
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
     gravadorAudio = new MediaRecorder(stream);
@@ -12,9 +11,18 @@ $('#startButton').on('click', async function () {
         const formData = new FormData();
         formData.append('audioFile', audioBlob, 'recordedAudio.wav');
 
-        await fetch('/api/audio/upload', {
-            method: 'POST',
-            body: formData
+        return $.ajax({
+            url: '/api/audio/upload',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function () {
+                alert('Áudio enviado com sucesso.');
+            },
+            error: function (err) {
+                alert('Erro ao enviar áudio:', err);
+            },
         });
     };
 
@@ -23,7 +31,6 @@ $('#startButton').on('click', async function () {
     $('#stopButton').prop('disabled', false);
 });
 
-// Evento para parar a gravação
 $('#stopButton').on('click', function () {
     gravadorAudio.stop();
     $('#startButton').prop('disabled', false);
